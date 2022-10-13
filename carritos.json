@@ -1,0 +1,5 @@
+<<<<<<< HEAD
+[{"productos":[{"nombre":"Xbox","descripcion":"descripcion breve del producto","codigo":"numeroRandom","imagen":"https://candied-rightful-shell.glitch.me/api/productos","precio":"16000","stock":"2","id":1,"timestamp":"11/9/2022 17:34:51"}],"id":1,"timestamp":"11/9/2022 18:00:04"}]
+=======
+[{"productos":[{"nombre":"Pantalla LG 4k","descripcion":"descripcion breve del producto","codigo":"numeroRandom","precio":"24000","imagen":"https://candied-rightful-shell.glitch.me/api/productos","stock":"9","id":"2"}],"id":1,"timestamp":"4/10/2022 17:06:50"}]
+>>>>>>> segundaEntrega
