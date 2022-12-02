@@ -4,13 +4,13 @@ class   CarritosDaoMongo extends ContenedorMongo{
     constructor(){
         super('carritos' , {
             productos: { type: [], required: true },
-            timestamp: { type: String, required: true }
+            timestamp: { type: String, required: true },
+            id: {type: String, required: true}
         })
     }
 
-    async crearCarrito(obj){
-        console.log(obj)
-        let carritos = await super.crearCarrito();
+    async crearCarrito(id){
+        let carritos = await super.crearCarrito(id);
         return carritos;
     };
 
@@ -25,6 +25,11 @@ class   CarritosDaoMongo extends ContenedorMongo{
     };
 
     async buscarCarrito(id){
+        let carrito = await super.buscarCarrito(id);
+        return carrito;
+    };
+
+    async buscarCarritoProds(id){
         let carrito = await super.buscarCarritoProds(id);
         return carrito;
     };

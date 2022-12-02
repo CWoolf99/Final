@@ -14,7 +14,7 @@ firebase:{
 mongo:{
     link:'mongodb://localhost:27017/mdb',
     options:{
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 10000,
     }
 }
 }

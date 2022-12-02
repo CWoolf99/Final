@@ -1,0 +1,47 @@
+<div>
+    <div class="card">
+        <h5 class="card-header">Carrito</h5>
+    <div class="card-body">
+        <table class="table , table-success">
+    <thead>
+        <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Imagen</th>
+        <th scope="col">Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each prodsC}}
+        <tr>
+        <td>{{this.nombre}}</td>
+        <td>{{this.precio}}</td>
+        <td><img src={{this.imagen}} class="img-fluid" alt="..." height="125" width="125"></td>
+        <td>
+            <form action="/api/carrito/{{../user}}/productos/{{this._id}}" method="post">
+                <button class="btn btn-dark">X</button>
+            </form>
+        </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    </table>
+        <form action="/api/carrito/compra" method="post">
+            <button class="btn btn-dark">Comprar</button>
+        </form>
+    </div>
+    </div>
+    <h1>Productos</h1>
+    {{#each prods}}
+    <div class="card" style="width: 18rem;">
+        <img src={{this.imagen}} class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{this.nombre}}</h5>
+            <p class="card-text">${{this.precio}}</p>
+            <form action="/api/carrito/{{../user}}/productos" method="post" >
+                <button class="btn btn-dark" name="id" value="{{this._id}}">Agregar al carrito</button>
+            </form>
+        </div>
+    {{/each}}
+</div>
+</div>

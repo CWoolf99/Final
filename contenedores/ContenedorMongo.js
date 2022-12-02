@@ -18,9 +18,9 @@ class ContenedorMongo {
             return undefined
         }
     };*/
-    async crearCarrito(){
+    async crearCarrito(id){
         try{
-            return await this.collection({productos:[],timestamp:new Date().toLocaleString()})
+            return await this.collection.create({productos:[],timestamp:new Date().toLocaleString(),id:id})
         } catch (err){
             return false
         }
@@ -28,7 +28,7 @@ class ContenedorMongo {
 
     async getAll () {
         try {
-            let contenido = await this.collection.find({})
+            let contenido = await this.collection.find({}).lean()
             return contenido; 
         }
         catch (err) {
@@ -36,9 +36,18 @@ class ContenedorMongo {
         }
     };
 
+    async buscarCarrito(id) {
+        try{
+            let productos = await this.collection.findOne({id:id});
+            return productos;
+        }
+        catch{
+            return undefined;
+        }
+    };
     async buscarCarritoProds(id) {
         try{
-            let productos = await this.collection.findOne({_id:id}).select('productos');
+            let productos = await this.collection.findOne({id:id}).select('productos');
             return productos;
         }
         catch{
@@ -48,7 +57,7 @@ class ContenedorMongo {
 
     async buscarProds(id) {
        try{
-        let productos = await this.collection.findOne({_id:id});
+        let productos = await this.collection.findOne({_id:id}).lean();
         return productos;
     }
     catch (err){
@@ -78,7 +87,7 @@ class ContenedorMongo {
 
     async modificarProducto (producto , id){
         try {
-            await this.collection.updateOne({_id:id},{$push:{productos:producto}})
+            await this.collection.updateOne({id:id},{$push:{productos:producto}})
             return producto
         } 
         catch (err) {
@@ -88,10 +97,10 @@ class ContenedorMongo {
     };
 
     async eliminarProducto (productoId , id ) {
-        const cartId= mongoose.Types.ObjectId(id)
+        const cartId= id
         const prodId= mongoose.Types.ObjectId(productoId)
         try {
-            await this.collection.updateOne({_id:cartId},{$pull:{productos:{_id:prodId}}});
+            await this.collection.updateOne({id:cartId},{$pull:{productos:{_id:prodId}}});
             const carrito = await this.buscarCarritoProds(id)
             return carrito
         } 

@@ -1,14 +1,42 @@
 import  express  from 'express';
+import handlebars from 'express-handlebars';
+import { engine } from 'express-handlebars';
+import session from 'express-session';
+import passport from 'passport';
+
 import CarritosDaoMongo from './daos/carritos/CarritosDaoMongo.js';
 import ProductosDaoMongo from './daos/productos/ProductosDaoMongo.js';
+import checkAuthentication from './auth/auth.js';
+import { nuevoUsuario , compraRealizada } from './mailer/mailer.js';
+//import mongoose from 'mongoose';
+
+
 const { Router } = express;
 
 const app = express();
 const routerP = Router();
 const routerC = Router();
+const routerL = Router();
+const routerR = Router();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static('views'))
+app.engine('handlebars' , engine())
+app.set('view engine', 'handlebars')
+app.set("views", "./views");
+app.use(session({
+    secret: 'shhhhhhhhhhhhhhhhhhhhh',
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: 600000
+    }
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 /*-------------Importación de las clases y declaración de admin----------- */
@@ -21,13 +49,17 @@ const ContenedorC = new CarritosDaoMongo();
 const admin = true;
 /*-------------Router productos----------- */
 
-routerP.get('/:id?', async ( req , res ) => { 
+routerP.get('/:id?', checkAuthentication , async ( req , res ) => { 
     const productoEnc = await ContenedorP.buscarproducto(req.params.id);
+    const id = req.user.username
     if(productoEnc){
-        res.send(productoEnc)
+        res.render('home' , {prods:[productoEnc], id:id , carritoExiste:carritoExiste })
     } else {
+        const carrito = await ContenedorC.buscarCarrito(id)
+        let carritoExiste = false
+        if (carrito) { carritoExiste = true }
         const productos = await ContenedorP.getAll();
-        res.send(productos)
+        res.render('home' , {prods:productos, id:id , carritoExiste:carritoExiste})
     }
 });
 
@@ -72,19 +104,14 @@ routerP.delete('/:id', async ( req , res ) => {
 /*-------------Router carrito----------- */
 
 routerC.post('/', async ( req , res ) => {
-    const producto = await ContenedorP.buscarproducto(req.body.id)
-    if (producto){
-        const carrito = {productos:producto}
-        const carritoN = await ContenedorC.crearCarrito(carrito)
-        if (carritoN){
-            res.send(carritoN)
-        } else {
-            res.send('error al guardar el carrito')
-        }
-    } else{
-        res.send('no se encontro el producto')
-    }  
-})
+    let id = req.user.username
+    const carritoN = await ContenedorC.crearCarrito(id)
+    if (carritoN){
+        res.redirect('/api/productos')
+    } else {
+        res.send('error al guardar el carrito')
+    }
+});
 
 routerC.delete('/:id', async ( req , res ) => {
     if (admin === true){
@@ -100,10 +127,12 @@ routerC.delete('/:id', async ( req , res ) => {
     } 
 })
 
-routerC.get('/:id/productos', async ( req , res ) => {
-    const carrito = await ContenedorC.buscarCarrito(req.params.id)
+routerC.get('/:id/productos', checkAuthentication , async ( req , res ) => {
+    const user = req.user.username
+    const carrito = await ContenedorC.buscarCarritoProds(req.params.id);
+    const productos= await ContenedorP.getAll();
     if (carrito){
-    res.send(carrito.productos)
+    res.render('carrito', {prodsC:carrito.productos , prods:productos , user:user})
     } else {
         res.send('no se encontro el carrito')
     }
@@ -114,7 +143,7 @@ routerC.post('/:id/productos', async ( req , res ) => {
     if (producto){
         const carrito = await ContenedorC.modificarProducto(producto , req.params.id)
         if (carrito){
-            res.send(JSON.stringify(carrito))
+            res.redirect(`/api/carrito/${req.params.id}/productos`)
         } else {
             res.send('error al guardar el carrito')
         }
@@ -123,25 +152,75 @@ routerC.post('/:id/productos', async ( req , res ) => {
     }  
 })
 
-routerC.delete('/:id/productos/:id_prod', async ( req , res ) => {
+routerC.post('/:id/productos/:id_prod', async ( req , res ) => {
         const carrito = await ContenedorC.eliminarProducto(req.params.id_prod , req.params.id)
         if (carrito){
-            res.send(JSON.stringify(carrito))
+            res.redirect(`/api/carrito/${req.params.id}/productos`)
         } else {
             res.send('error al guardar el carrito')
         }
 })
 
+routerC.post('/compra', async ( req , res ) => {
+    compraRealizada(req?.user.number)
+    res.send('gracias por tu compra')
+})
+
+/*-------------Router Login----------- */
+routerL.get('/' , (req,res) => {
+    if(req.isAuthenticated()){
+        res.redirect('/')
+    } else {
+    const {url , method} = req
+    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    res.render('formLogin')
+}
+});
+
+routerL.post('/' , passport.authenticate('login', {failureRedirect:'/login/errorLogIn'}),  (req,res) => {res.redirect('/api/productos')}); 
+routerL.get('/errorLogIn', (req,res) => {
+    const {url , method} = req
+    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    res.render('errorLogIn')
+})
+routerL.get('/logout' , (req,res) => {
+    let nombre = req.user.username
+    req.logout(err => {
+    if (!err) {
+        const {url , method} = req
+        //infoLogger.info(`Ruta ${method} ${url} recibida`)
+        res.render('logout', {nombre:nombre}) 
+         
+    } else {
+        res.redirect('/login')
+    }}); 
+})
+/*-------------Router Register----------- */
+routerR.get('/', (req,res) => {
+    //const {url , method} = req
+    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    res.render('signUp')
+});
+routerR.post('/', passport.authenticate('signup', {failureRedirect:'/register/errorRegister'}), (req,res) => {
+    nuevoUsuario(req?.user)
+    res.redirect('/api/productos')});
+routerR.get('/errorRegister', (req,res) => {
+    //const {url , method} = req
+    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    res.render('errorSignUp')
+})
+
 /*-------------Declaración de rutas base----------- */
 app.use('/api/productos', routerP)
 app.use('/api/carrito', routerC)
+app.use('/login', routerL)
+app.use('/register', routerR)
 
 app.use('*', (req , res) => {
-    const error = { error : -2, descripcion: `ruta no implementada`};
+    const {url} = req
+    const error = { error : -2, descripcion: `ruta ${url} no implementada`};
     res.send(error)
-})
-
-app.use(express.static('public'))
+});
 
 /*-------------Inicialización del server----------- */
 const Port = 8080;
