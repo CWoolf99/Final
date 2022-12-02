@@ -28,18 +28,34 @@ const nuevoUsuario = async (usuario) => {
         console.log(error)
     }
 }
-const accountSid = 'AC7a3606094faf146bb84f07f26c61fb17';
+
+const emailCompra = async (productos , email , user) => {
+    try{
+        const info = await transporter.sendMail({
+            from: mail,
+            to: email,
+            subject: 'Pedido en proceso',
+            html: `<h1>${user} tu pedido ha sido realizado y se encuentra en proceso. Productos:${productos}</h1>`})
+        console.log(info)
+    }
+    catch (error){
+        console.log(error)
+    }
+}
+
+const accountSid = process.env.ACCOUNTSID;
 const authToken = process.env.AUTHTOKEN;
 
 const client = twilio(accountSid , authToken)
 
-const compraRealizada = async (numero) => {
+const compraRealizada = async (numero , productos , user) => {
     try{
         const message = await client.messages.create({
-            body: 'Tu pedido ha sido realizado y se encuentra en proceso',
+            body: `${user} tu pedido ha sido realizado y se encuentra en proceso. Productos:${productos}`,
             from: 'whatsapp:+14155238886',
-            to: 'whatsapp:+525534660887'
+            to: `whatsapp:${numero}`
         })
+        console.log(numero)
         console.log(message)
     }
     catch (error){
@@ -47,4 +63,4 @@ const compraRealizada = async (numero) => {
     }
 }
 
-export { nuevoUsuario , compraRealizada };
+export { nuevoUsuario , emailCompra ,compraRealizada };

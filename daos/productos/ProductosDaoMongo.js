@@ -2,7 +2,7 @@ import ContenedorMongo from "../../contenedores/ContenedorMongo.js";
 
 class ProductosDaoFs extends ContenedorMongo{
     constructor(){
-        super('productos' , {
+        super('productosFinal' , {
             nombre: { type: String, required: true },
             descripcion: { type: String, required: true },
             codigo: { type: String, required: true },
@@ -14,7 +14,7 @@ class ProductosDaoFs extends ContenedorMongo{
     }
 
     async save( obj ){
-        await super.crearCarrito(obj);
+        await super.guardarProducto(obj);
     };
 
     async getAll(){

@@ -3,13 +3,17 @@ import handlebars from 'express-handlebars';
 import { engine } from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
+import * as dotenv from 'dotenv';
+import cluster from 'cluster';
 
 import CarritosDaoMongo from './daos/carritos/CarritosDaoMongo.js';
 import ProductosDaoMongo from './daos/productos/ProductosDaoMongo.js';
 import checkAuthentication from './auth/auth.js';
-import { nuevoUsuario , compraRealizada } from './mailer/mailer.js';
+import { nuevoUsuario , emailCompra ,compraRealizada } from './mailer/mailer.js';
 //import mongoose from 'mongoose';
 
+dotenv.config()
+const modo = process.argv[2] == 'Cluster'
 
 const { Router } = express;
 
@@ -162,7 +166,10 @@ routerC.post('/:id/productos/:id_prod', async ( req , res ) => {
 })
 
 routerC.post('/compra', async ( req , res ) => {
-    compraRealizada(req?.user.number)
+    const user = req.user
+    const productos = await ContenedorC.buscarCarritoProds(user?.username)
+    emailCompra(productos , user?.username , user?.username)
+    compraRealizada(user?.number , productos , user?.username)
     res.send('gracias por tu compra')
 })
 
@@ -223,9 +230,24 @@ app.use('*', (req , res) => {
 });
 
 /*-------------Inicialización del server----------- */
-const Port = 8080;
+const PORT = process.env.PORT || 8080;
 
-const connectedServer = app.listen(Port, () => {
-    console.log(`Servidor http escuchando en el puerto ${connectedServer.address().port}`)
-})
-connectedServer.on('error', error => console.log(`Error en servidor ${error}`))
+if(modo && cluster.isPrimary) {
+    console.log(`PID MASTER ${process.pid}`)
+  
+    for(let i=0; i<3; i++) {
+        cluster.fork()
+    }
+  
+    cluster.on('exit', worker => {
+        console.log('Worker', worker.process.pid, 'died', new Date().toLocaleString())
+        cluster.fork()
+    })
+  }
+  else {
+    const connectedServer = app.listen(PORT, () => {
+        console.log(`Servidor http escuchando en el puerto ${connectedServer.address().port}-PID ${process.pid}`)
+    })
+    connectedServer.on('error', error => console.log(`Error en servidor ${error}`))
+    
+  }

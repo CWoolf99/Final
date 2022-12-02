@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 import config from "../utils/config.js"
+import * as dotenv from 'dotenv';
+dotenv.config()
+import express from 'express';
 
-await mongoose.connect(config.mongo.link,config.mongo.options);
+await mongoose.connect(process.env.MONGO,config.mongo.options);
 
 class ContenedorMongo {
     constructor(collection , schema ){
         this.collection = mongoose.model(collection , schema )  
     }
-   /* async crearCarrito(obj) {
+   async guardarProducto(obj) {
         const carrito = {...obj}
         carrito.timestamp = new Date().toLocaleString()
         try {
@@ -17,7 +20,7 @@ class ContenedorMongo {
         catch (err) {
             return undefined
         }
-    };*/
+    };
     async crearCarrito(id){
         try{
             return await this.collection.create({productos:[],timestamp:new Date().toLocaleString(),id:id})
