@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 import express from 'express';
 
+import {errorLogger} from '../logger/logger.js'
+
 await mongoose.connect(process.env.MONGO,config.mongo.options);
 
 class ContenedorMongo {
@@ -18,6 +20,7 @@ class ContenedorMongo {
             return carrito
         } 
         catch (err) {
+            errorLogger.error('error al guardar en mongo')
             return undefined
         }
     };
@@ -25,6 +28,7 @@ class ContenedorMongo {
         try{
             return await this.collection.create({productos:[],timestamp:new Date().toLocaleString(),id:id})
         } catch (err){
+            errorLogger.error('error al guardar en mongo')
             return false
         }
     }
@@ -35,7 +39,7 @@ class ContenedorMongo {
             return contenido; 
         }
         catch (err) {
-            console.log('error en la lectura')
+            errorLogger.error('error en la lectura')
         }
     };
 
@@ -45,6 +49,7 @@ class ContenedorMongo {
             return productos;
         }
         catch{
+            errorLogger.error('error en la lectura')
             return undefined;
         }
     };
@@ -54,6 +59,7 @@ class ContenedorMongo {
             return productos;
         }
         catch{
+            errorLogger.error('error en la lectura')
             return undefined;
         }
     };
@@ -64,6 +70,7 @@ class ContenedorMongo {
         return productos;
     }
     catch (err){
+        errorLogger.error('error en la lectura')
         return undefined
         }
     };
@@ -75,6 +82,7 @@ class ContenedorMongo {
             return prod
         } 
         catch (err) {
+            errorLogger.error('error al guardar en mongo')
             return undefined
         }
     };
@@ -84,6 +92,7 @@ class ContenedorMongo {
             return true
         } 
         catch (err) {
+            errorLogger.error('error al guardar en mongo')
             return false
         }
     };
@@ -94,6 +103,7 @@ class ContenedorMongo {
             return producto
         } 
         catch (err) {
+            errorLogger.error('error al guardar en mongo')
             return undefined
         }
 
@@ -108,6 +118,7 @@ class ContenedorMongo {
             return carrito
         } 
         catch (err) {
+            errorLogger.error('error al guardar en mongo')
             return false
         }
     };

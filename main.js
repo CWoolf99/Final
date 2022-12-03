@@ -10,7 +10,7 @@ import CarritosDaoMongo from './daos/carritos/CarritosDaoMongo.js';
 import ProductosDaoMongo from './daos/productos/ProductosDaoMongo.js';
 import checkAuthentication from './auth/auth.js';
 import { nuevoUsuario , emailCompra ,compraRealizada } from './mailer/mailer.js';
-//import mongoose from 'mongoose';
+import {warnLogger , infoLogger } from './logger/logger.js'
 
 dotenv.config()
 const modo = process.argv[2] == 'Cluster'
@@ -53,21 +53,25 @@ const ContenedorC = new CarritosDaoMongo();
 const admin = true;
 /*-------------Router productos----------- */
 
-routerP.get('/:id?', checkAuthentication , async ( req , res ) => { 
+routerP.get('/:id?', checkAuthentication , async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     const productoEnc = await ContenedorP.buscarproducto(req.params.id);
-    const id = req.user.username
+    const user = req?.user
+    const carrito = await ContenedorC.buscarCarrito(user?.username)
+    let carritoExiste = false
+    if (carrito) { carritoExiste = true }
     if(productoEnc){
-        res.render('home' , {prods:[productoEnc], id:id , carritoExiste:carritoExiste })
+        res.render('home' , {prods:[productoEnc], id:user?.username , carritoExiste:carritoExiste , User:user?.user , avatar:user?.photo})
     } else {
-        const carrito = await ContenedorC.buscarCarrito(id)
-        let carritoExiste = false
-        if (carrito) { carritoExiste = true }
         const productos = await ContenedorP.getAll();
-        res.render('home' , {prods:productos, id:id , carritoExiste:carritoExiste})
+        res.render('home' , {prods:productos, id:user?.username , carritoExiste:carritoExiste , User:user?.user , avatar:user?.photo})
     }
 });
 
 routerP.post('/',( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     if (admin === true){
   ContenedorP.save(req.body);
   res.send(`se ha guardado con éxito el siguiente producto: ${JSON.stringify(req.body)}`) 
@@ -78,6 +82,8 @@ routerP.post('/',( req , res ) => {
 });
 
 routerP.put('/:id', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     if (admin === true){
     const productoA = await ContenedorP.actualizaproducto(req.params.id , req.body)
     if (productoA){
@@ -92,6 +98,8 @@ routerP.put('/:id', async ( req , res ) => {
 })
 
 routerP.delete('/:id', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     if (admin === true){
     const productoB = await ContenedorP.borrarPorId(req.params.id)
     if (productoB){
@@ -108,6 +116,8 @@ routerP.delete('/:id', async ( req , res ) => {
 /*-------------Router carrito----------- */
 
 routerC.post('/', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     let id = req.user.username
     const carritoN = await ContenedorC.crearCarrito(id)
     if (carritoN){
@@ -118,6 +128,8 @@ routerC.post('/', async ( req , res ) => {
 });
 
 routerC.delete('/:id', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     if (admin === true){
     const carritoB = await ContenedorC.borrarPorId(req.params.id)
     if (carritoB){
@@ -132,6 +144,8 @@ routerC.delete('/:id', async ( req , res ) => {
 })
 
 routerC.get('/:id/productos', checkAuthentication , async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     const user = req.user.username
     const carrito = await ContenedorC.buscarCarritoProds(req.params.id);
     const productos= await ContenedorP.getAll();
@@ -143,6 +157,8 @@ routerC.get('/:id/productos', checkAuthentication , async ( req , res ) => {
 })
 
 routerC.post('/:id/productos', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     const producto = await ContenedorP.buscarproducto(req.body.id)
     if (producto){
         const carrito = await ContenedorC.modificarProducto(producto , req.params.id)
@@ -157,6 +173,8 @@ routerC.post('/:id/productos', async ( req , res ) => {
 })
 
 routerC.post('/:id/productos/:id_prod', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
         const carrito = await ContenedorC.eliminarProducto(req.params.id_prod , req.params.id)
         if (carrito){
             res.redirect(`/api/carrito/${req.params.id}/productos`)
@@ -166,6 +184,8 @@ routerC.post('/:id/productos/:id_prod', async ( req , res ) => {
 })
 
 routerC.post('/compra', async ( req , res ) => {
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     const user = req.user
     const productos = await ContenedorC.buscarCarritoProds(user?.username)
     emailCompra(productos , user?.username , user?.username)
@@ -179,7 +199,7 @@ routerL.get('/' , (req,res) => {
         res.redirect('/')
     } else {
     const {url , method} = req
-    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     res.render('formLogin')
 }
 });
@@ -187,7 +207,7 @@ routerL.get('/' , (req,res) => {
 routerL.post('/' , passport.authenticate('login', {failureRedirect:'/login/errorLogIn'}),  (req,res) => {res.redirect('/api/productos')}); 
 routerL.get('/errorLogIn', (req,res) => {
     const {url , method} = req
-    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     res.render('errorLogIn')
 })
 routerL.get('/logout' , (req,res) => {
@@ -195,7 +215,7 @@ routerL.get('/logout' , (req,res) => {
     req.logout(err => {
     if (!err) {
         const {url , method} = req
-        //infoLogger.info(`Ruta ${method} ${url} recibida`)
+        infoLogger.info(`Ruta ${method} ${url} recibida`)
         res.render('logout', {nombre:nombre}) 
          
     } else {
@@ -204,16 +224,16 @@ routerL.get('/logout' , (req,res) => {
 })
 /*-------------Router Register----------- */
 routerR.get('/', (req,res) => {
-    //const {url , method} = req
-    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     res.render('signUp')
 });
 routerR.post('/', passport.authenticate('signup', {failureRedirect:'/register/errorRegister'}), (req,res) => {
     nuevoUsuario(req?.user)
     res.redirect('/api/productos')});
 routerR.get('/errorRegister', (req,res) => {
-    //const {url , method} = req
-    //infoLogger.info(`Ruta ${method} ${url} recibida`)
+    const {url , method} = req
+    infoLogger.info(`Ruta ${method} ${url} recibida`)
     res.render('errorSignUp')
 })
 
@@ -223,11 +243,12 @@ app.use('/api/carrito', routerC)
 app.use('/login', routerL)
 app.use('/register', routerR)
 
-app.use('*', (req , res) => {
-    const {url} = req
-    const error = { error : -2, descripcion: `ruta ${url} no implementada`};
-    res.send(error)
-});
+app.get('*', ( req , res ) => {
+    const {url , method} = req
+    warnLogger.warn(`Ruta ${method} ${url} no está implementada`)
+    res.send(`Ruta ${method} ${url} no está implementada`)
+})
+
 
 /*-------------Inicialización del server----------- */
 const PORT = process.env.PORT || 8080;
