@@ -55,7 +55,6 @@ const compraRealizada = async (numero , productos , user) => {
             from: 'whatsapp:+14155238886',
             to: `whatsapp:${numero}`
         })
-        console.log(numero)
         console.log(message)
     }
     catch (error){
