@@ -1,6 +1,6 @@
 import ContenedorMongo from "../../contenedores/ContenedorMongo.js";
 
-class ProductosDaoFs extends ContenedorMongo{
+class ProductosDaoMongo extends ContenedorMongo{
     constructor(){
         super('productosFinal' , {
             nombre: { type: String, required: true },
@@ -38,4 +38,4 @@ class ProductosDaoFs extends ContenedorMongo{
     };
 };
 
-export default ProductosDaoFs;
+export default ProductosDaoMongo;

@@ -6,11 +6,13 @@ import passport from 'passport';
 import * as dotenv from 'dotenv';
 import cluster from 'cluster';
 
-import CarritosDaoMongo from './daos/carritos/CarritosDaoMongo.js';
-import ProductosDaoMongo from './daos/productos/ProductosDaoMongo.js';
-import checkAuthentication from './auth/auth.js';
-import { nuevoUsuario , emailCompra ,compraRealizada } from './mailer/mailer.js';
-import {warnLogger , infoLogger } from './logger/logger.js'
+import checkAuthentication from './services/auth/auth.js';
+import { emailCompra ,compraRealizada } from './services/mailer/mailer.js';
+import {warnLogger , infoLogger } from './services/logger/logger.js'
+import loginRouter from './router/loginRouter.js';
+import registerRouter from './router/signupRouter.js';
+import productosRouter from './router/productosRouter.js';
+import carritoRouter from './router/carritoRouter.js';
 
 dotenv.config()
 const modo = process.argv[2] == 'Cluster'
@@ -18,10 +20,7 @@ const modo = process.argv[2] == 'Cluster'
 const { Router } = express;
 
 const app = express();
-const routerP = Router();
 const routerC = Router();
-const routerL = Router();
-const routerR = Router();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -40,78 +39,15 @@ app.use(session({
 }))
 
 app.use(passport.initialize());
-app.use(passport.session());
 
 
 /*-------------Importación de las clases y declaración de admin----------- */
 //const ContenedorProductos = require('./clases/productos');
 //const ContenedorCarrito = require('./clases/carrito');
 
-const ContenedorP = new ProductosDaoMongo();
-const ContenedorC = new CarritosDaoMongo();
+//const ContenedorC = new CarritosDaoMongo();
 
 const admin = true;
-/*-------------Router productos----------- */
-
-routerP.get('/:id?', checkAuthentication , async ( req , res ) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    const productoEnc = await ContenedorP.buscarproducto(req.params.id);
-    const user = req?.user
-    const carrito = await ContenedorC.buscarCarrito(user?.username)
-    let carritoExiste = false
-    if (carrito) { carritoExiste = true }
-    if(productoEnc){
-        res.render('home' , {prods:[productoEnc], id:user?.username , carritoExiste:carritoExiste , User:user?.user , avatar:user?.photo})
-    } else {
-        const productos = await ContenedorP.getAll();
-        res.render('home' , {prods:productos, id:user?.username , carritoExiste:carritoExiste , User:user?.user , avatar:user?.photo})
-    }
-});
-
-routerP.post('/',( req , res ) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    if (admin === true){
-  ContenedorP.save(req.body);
-  res.send(`se ha guardado con éxito el siguiente producto: ${JSON.stringify(req.body)}`) 
-} else {
-    const error = { error : -1, descripcion: 'ruta api/productos/ método post no autorizada' }
-    res.send(error)
-} 
-});
-
-routerP.put('/:id', async ( req , res ) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    if (admin === true){
-    const productoA = await ContenedorP.actualizaproducto(req.params.id , req.body)
-    if (productoA){
-    res.send(`se actualizó el producto ${JSON.stringify(productoA)}`)
-    }   else{
-        res.send(`no se encontró el producto`)
-    }
-    } else {
-    const error = { error : -1, descripcion: `ruta api/productos/${req.params.id} método put no autorizada` }
-    res.send(error)
-} 
-})
-
-routerP.delete('/:id', async ( req , res ) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    if (admin === true){
-    const productoB = await ContenedorP.borrarPorId(req.params.id)
-    if (productoB){
-    res.send(`se eliminó el producto con id ${req.params.id}`)
-    }   else{
-        res.send(`no se encontró el producto`)
-    }
-    } else {
-    const error = { error : -1, descripcion: `ruta api/productos/${req.params.id} método delete no autorizada` }
-    res.send(error)
-} 
-})
 
 /*-------------Router carrito----------- */
 
@@ -193,55 +129,11 @@ routerC.post('/compra', async ( req , res ) => {
     res.send('gracias por tu compra')
 })
 
-/*-------------Router Login----------- */
-routerL.get('/' , (req,res) => {
-    if(req.isAuthenticated()){
-        res.redirect('/')
-    } else {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    res.render('formLogin')
-}
-});
-
-routerL.post('/' , passport.authenticate('login', {failureRedirect:'/login/errorLogIn'}),  (req,res) => {res.redirect('/api/productos')}); 
-routerL.get('/errorLogIn', (req,res) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    res.render('errorLogIn')
-})
-routerL.get('/logout' , (req,res) => {
-    let nombre = req.user.username
-    req.logout(err => {
-    if (!err) {
-        const {url , method} = req
-        infoLogger.info(`Ruta ${method} ${url} recibida`)
-        res.render('logout', {nombre:nombre}) 
-         
-    } else {
-        res.redirect('/login')
-    }}); 
-})
-/*-------------Router Register----------- */
-routerR.get('/', (req,res) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    res.render('signUp')
-});
-routerR.post('/', passport.authenticate('signup', {failureRedirect:'/register/errorRegister'}), (req,res) => {
-    nuevoUsuario(req?.user)
-    res.redirect('/api/productos')});
-routerR.get('/errorRegister', (req,res) => {
-    const {url , method} = req
-    infoLogger.info(`Ruta ${method} ${url} recibida`)
-    res.render('errorSignUp')
-})
-
 /*-------------Declaración de rutas base----------- */
-app.use('/api/productos', routerP)
-app.use('/api/carrito', routerC)
-app.use('/login', routerL)
-app.use('/register', routerR)
+app.use('/productos', productosRouter)
+app.use('/carrito', carritoRouter)
+app.use('/signup', registerRouter)
+app.use('/login', loginRouter)
 
 app.get('*', ( req , res ) => {
     const {url , method} = req

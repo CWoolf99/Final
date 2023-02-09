@@ -4,9 +4,9 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 import express from 'express';
 
-import {errorLogger} from '../logger/logger.js'
+import {errorLogger} from '../services/logger/logger.js'
 
-await mongoose.connect(process.env.MONGO,config.mongo.options);
+//await mongoose.connect(process.env.MONGO,config.mongo.options);
 
 class ContenedorMongo {
     constructor(collection , schema ){

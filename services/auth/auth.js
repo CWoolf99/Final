@@ -1,12 +1,39 @@
-//const LocalStrategy = require("passport-local").Strategy;
-
 import passport from 'passport'; 
 import {Strategy as LocalStrategy} from 'passport-local';
 import bcrypt from 'bcrypt';
-import User from '../models/user.js';
-//import mongoose from 'mongoose';
+import User from '../../models/user.js';
+import { Strategy , ExtractJwt } from 'passport-jwt';
+import  jwt  from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
+import config from "../../utils/config.js"
 
-//await mongoose.connect('mongodb+srv://Cwoolf99:Cw1234567$@cluster0.pbwjegv.mongodb.net/?retryWrites=true&w=majority',{serverSelectionTimeoutMS: 5000,})
+dotenv.config()
+async function connect(){ 
+    await mongoose.connect(process.env.MONGO,config.mongo.options);
+    return console.log("mongo conectado")};
+
+connect();
+
+const PRIVATE_KEY = "myprivatekey";
+
+const opts = {}
+opts.jwtFromRequest = ExtractJwt.fromUrlQueryParameter('token');
+opts.secretOrKey = PRIVATE_KEY;
+
+passport.use('jwt',new Strategy(opts, function(jwt_payload, done) {
+    User.findOne({username: jwt_payload.data.username}, function(err, user) {
+        if (err) {
+            return done(err, false);
+        }
+        if (user) {
+            return done(null, user);
+        } else {
+            return done(null, false);
+            // or you could create a new account
+        }
+    });
+}));
 
 const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password);
 const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
@@ -41,9 +68,9 @@ passport.use('signup', new LocalStrategy({
 passport.serializeUser((user, done) => done(null, user._id));
 passport.deserializeUser((id, done) => User.findById(id, done));
 
-const checkAuthentication = (req, res, next) => {
-	if (req.isAuthenticated()) next();
-	else res.redirect('/login');
-}
+function generateToken( user ) {
+    const token = jwt.sign( { data:user } , PRIVATE_KEY , { expiresIn:'24h' } )
+    return token
+};
 
-export default checkAuthentication;
+export default generateToken;
