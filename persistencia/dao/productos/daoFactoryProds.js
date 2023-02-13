@@ -1,35 +1,27 @@
 import daoMongoProds from "./daoMongoProds.js";
-import daoFirebsProds from "./daoFirebsProds.js";
 
-const db = process.argv[3] || "Mongo";
+const db = "Mongo";
 
-const collectionMongo = 'productosFinal';
+const collectionMongo = "productosbackend";
 const schema = {
-    nombre: { type: String, required: true },
-    descripcion: { type: String, required: true },
-    codigo: { type: String, required: true },
-    imagen: { type: String, required: true },
-    precio: { type: Number, required: true },
-    stock: { type: Number, required: true },
-    timestamp: { type: String, required: true }
+  nombre: { type: String, required: true },
+  descripcion: { type: String, required: true },
+  imagen: { type: String, required: true },
+  precio: { type: Number, required: true },
+  categoria: { type: String, required: true },
 };
 
-const collectionFbs = 'productos';
-
-let dao
-switch ( db ) {
-    case 'Mongo':
-        dao = new daoMongoProds( collectionMongo , schema )
-        break
-    case 'Fbs':
-        dao = new daoFirebsProds( collectionFbs )
-        break
+let dao;
+switch (db) {
+  case "Mongo":
+    dao = new daoMongoProds(collectionMongo, schema);
+    break;
 }
 
 class daoFactoryProds {
-    static getDao() {
-        return dao
-    }
+  static getDao() {
+    return dao;
+  }
 }
 
 export default daoFactoryProds;

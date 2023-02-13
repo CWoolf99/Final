@@ -1,0 +1,21 @@
+<div class="text-bg-secondary p-3">
+        <h1>Centro de mensajes</h1>
+        {{#if isAdmin}}
+            <div class="alert alert-danger" role="alert">Este usuario es admin</div>
+        {{/if}}
+         <div class="alert alert-success" role="alert">Logeado con usuario:{{usuario}}</div>
+        <div id="mensajes"></div>
+        <form id="formMensajes">
+            <div class="mb-3">
+                <input type="hidden" class="form-control" id="usuario" value="{{usuario}}">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="mensaje" placeholder="escribe un mensaje">
+            </div>
+            <div class="mb-3">
+                <input type="hidden" class="form-control" id="idAmin" value={{isAdmin}}>
+            </div>
+            <button class="btn btn-dark" id="botonEnviar">Enviar</button>
+        </form>
+    </div>
+<script src="../chat.js"></script>

@@ -1,31 +1,25 @@
 import daoMongoCarrito from "./daoMongoCarrito.js";
-import daoFirebsCarrito from "./daoFirebsCarrito.js";
 
-const db = process.argv[3] || "Mongo";
+const db = "Mongo";
 
-const collectionMongo = 'carritos';
+const collectionMongo = "carritosbackend";
 const schema = {
-    productos: { type: [], required: true },
-    timestamp: { type: String, required: true },
-    id: {type: String, required: true}
+  productos: { type: [], required: true },
+  id: { type: String, required: true },
+  direccion: { type: String, required: true },
 };
 
-const collectionFbs = 'carritos';
-
-let dao
-switch ( db ) {
-    case 'Mongo':
-        dao = new daoMongoCarrito( collectionMongo , schema )
-        break
-    case 'Fbs':
-        dao = new daoFirebsCarrito( collectionFbs )
-        break
-};
+let dao;
+switch (db) {
+  case "Mongo":
+    dao = new daoMongoCarrito(collectionMongo, schema);
+    break;
+}
 
 class daoFactoryCarrito {
-    static getDao() {
-        return dao
-    }
-};
+  static getDao() {
+    return dao;
+  }
+}
 
 export default daoFactoryCarrito;

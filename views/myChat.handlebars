@@ -1,0 +1,14 @@
+<div class="text-bg-secondary p-3">
+    <h1>Enviados por {{usuario}}</h1>
+    {{#if sinMensajes}}
+        <div class="alert alert-danger" role="alert">Este usuario no ha enviado mensajes</div>
+    {{else}}
+    {{#each mensajes}}
+    <div>
+        <b style="color:black;">{{this.usuario}}</b>
+        [<span style="color:yellow;">{{this.timestamp}}</span>] :
+        <i style="color:darkblue;">{{this.mensaje}}</i>
+    </div>
+    {{/each}}
+    {{/if}}
+</div>

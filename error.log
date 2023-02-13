@@ -7,3 +7,68 @@
 {"level":50,"time":1675392370684,"pid":2848,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
 {"level":50,"time":1675880114821,"pid":3146,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
 {"level":50,"time":1675917053692,"pid":7461,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676073914978,"pid":3364,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676074138536,"pid":3508,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676074316156,"pid":3563,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676074412176,"pid":3610,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676074454966,"pid":3651,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676074548601,"pid":3737,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676074888337,"pid":3796,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676090545887,"pid":3961,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676090883299,"pid":4038,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676091265148,"pid":4101,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676091296291,"pid":4147,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676093117516,"pid":4506,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676093139602,"pid":4506,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676171408929,"pid":7062,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676171440730,"pid":7102,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676171516064,"pid":7150,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676171551607,"pid":7272,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676171605077,"pid":7319,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676171686919,"pid":7359,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676219426058,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219443071,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219468447,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219520745,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219538398,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219550409,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219565319,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219593691,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676219715936,"pid":10014,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676219819083,"pid":10115,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226011823,"pid":10925,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226115357,"pid":10982,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226264254,"pid":11085,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226406782,"pid":11129,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226671217,"pid":11129,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226699340,"pid":11191,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676226831114,"pid":11281,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676227131275,"pid":11575,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676227632894,"pid":11699,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676227748082,"pid":11869,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676227918698,"pid":11916,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676227932748,"pid":11958,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676231934972,"pid":12570,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676244359861,"pid":14160,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676244425419,"pid":14181,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676244483233,"pid":14230,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676244510320,"pid":14274,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262248953,"pid":15095,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262269078,"pid":15138,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262289461,"pid":15181,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262326702,"pid":15181,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262355628,"pid":15226,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262387473,"pid":15279,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262408635,"pid":15331,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262424325,"pid":15331,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262446158,"pid":15376,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262470295,"pid":15418,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262510769,"pid":15460,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262580209,"pid":15544,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676262587365,"pid":15544,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676263777403,"pid":16179,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676263827047,"pid":16179,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676263953807,"pid":16260,"hostname":"Christians-MacBook-Pro.local","msg":"error al guardar en mongo"}
+{"level":50,"time":1676266934690,"pid":16904,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676266983827,"pid":16946,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}
+{"level":50,"time":1676267410344,"pid":17138,"hostname":"Christians-MacBook-Pro.local","msg":"error en la lectura"}

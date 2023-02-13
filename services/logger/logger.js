@@ -1,12 +1,12 @@
-import pino from 'pino';
+import pino from "pino";
 
 const infoLogger = pino();
-infoLogger.level = 'info'
+infoLogger.level = "info";
 
-const warnLogger = pino('warn.log')
-warnLogger.level = 'warn'
+const warnLogger = pino("warn.log");
+warnLogger.level = "warn";
 
-const errorLogger = pino('error.log')
-errorLogger.level = 'error'
+const errorLogger = pino("error.log");
+errorLogger.level = "error";
 
-export { infoLogger , warnLogger , errorLogger };
+export { infoLogger, warnLogger, errorLogger };
