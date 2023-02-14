@@ -3,6 +3,7 @@ Proyecto Final del curso de backend de coderhouse
 Este proyecto es una una api rest que utiliza mongo atlas de base de datos y consiste en el backend de un ecommerce en el que se pueden modifcar los productos del mismo y manipular los carritos del los clientes para generar órdenes de compra. A su vez tiene un sistema de autenticación que útiliza jwt.  
 
 Iniciar  modo fork ejemplo:nodemon main.js
+
 Iniciar modo cluster ejemplo: nodemon main.js Cluster
 
 Instalar dependencias: npm i
@@ -24,7 +25,9 @@ Dependencias:
     "socket.io": "^4.5.1"
 
 (Todas las colecciones de las bases de datos que utilizon las rutas se encuentran en el archivo dao factory de la respectiva ruta con excepción del las de usuarios que se encuentra en ./presistencia/modelos/user.js)
+
 Rutas:
+
     Login y singup:
         Get / || Get /signup
         Las rutas de login y signup renderizan vistas con hbs para que inicies sesión o te registres llenando los forms de las vistas.
